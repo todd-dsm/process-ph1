@@ -1,0 +1,121 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<esc><wait>",
+        "install <wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed_path`}} <wait>",
+        "debian-installer=en_US <wait>",
+        "auto <wait>",
+        "locale=en_US <wait>",
+        "kbd-chooser/method=us <wait>",
+        "keyboard-configuration/xkb-keymap=us <wait>",
+        "netcfg/get_hostname={{ .Name }} <wait>",
+        "netcfg/get_domain=vagrantup.com <wait>",
+        "fb=false <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "console-setup/ask_detect=false <wait>",
+        "console-keymaps-at/keymap=us <wait>",
+        "grub-installer/bootdev=/dev/sda <wait>",
+        "<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Debian_64",
+      "post_shutdown_delay": "10s",
+      "hard_drive_interface": "sata",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `mirror`}}/{{user `mirror_directory`}}/{{user `iso_name`}}",
+      "output_directory": "{{user `build_dir` }}/debian",
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/shutdown -hP now",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{ user `memory` }}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{ user `cpus` }}"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "{{ user `template` }}"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "{{user `box_dir`}}/{{user `box_os`}}/{{user `box_basename`}}-{{.Provider}}.box"
+    }
+  ],
+  "provisioners": [
+    {
+      "destination": "/tmp/bento-metadata.json",
+      "source": "{{user `metadata`}}",
+      "type": "file"
+    },
+    {
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/common/metadata.sh",
+        "scripts/common/autoprep.sh",
+        "scripts/debian/update.sh",
+        "scripts/common/sshd.sh",
+        "scripts/debian/networking.sh",
+        "scripts/debian/sudoers.sh",
+        "scripts/debian/systemd.sh",
+        "scripts/common/virtualbox.sh",
+        "scripts/common/vmware.sh",
+        "scripts/common/parallels.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/debian/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ]
+    }
+  ],
+  "variables": {
+    "box_os": "debian",
+    "box_basename": "jessie",
+    "template": "debian-8.6-amd64",
+    "build_dir": "{{env `PACKER_BUILD_DIR`}}",
+    "box_dir": "{{env `VAGRANT_BOXES`}}",
+    "build_timestamp": "{{isotime \"20060102150405\"}}",
+    "cpus": "1",
+    "disk_size": "40960",
+    "git_revision": "__unknown_git_revision__",
+    "headless": "",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "iso_checksum": "e9cb144e486409b2ea1454dceae8d46e0ebab88435cf0b6e7a18f3aa3a51c538",
+    "iso_checksum_type": "sha256",
+    "iso_name": "debian-8.6.0-amd64-CD-1.iso",
+    "memory": "512",
+    "metadata": "floppy/dummy_metadata.json",
+    "mirror": "http://cdimage.debian.org/cdimage/release",
+    "mirror_directory": "8.6.0/amd64/iso-cd",
+    "name": "based",
+    "no_proxy": "{{env `no_proxy`}}",
+    "preseed_path": "debian-8/preseed.cfg",
+    "version": "2.1.TIMESTAMP"
+  }
+}
