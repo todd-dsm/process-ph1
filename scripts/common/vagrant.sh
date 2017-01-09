@@ -5,8 +5,10 @@ set -eux
 ### VARIABLES
 ###----------------------------------------------------------------------------
 export DEBIAN_FRONTEND=noninteractive
-vagrantHome='/home/vagrant'
-backupDir="$vagrantHome/backup"
+declare vagrantHome='/home/vagrant'
+declare backupDir="$vagrantHome/backup"
+declare knownHosts="$vagrantHome/.ssh/known_hosts"
+declare remoteHost='github.com'
 
 ## Setup ~/.bashrc
 printf '\n\n%s\n' "Setting the ~/.bashrc file..."
@@ -186,6 +188,19 @@ fi
 ### Copy keys for github
 ###---
 printf '\n\n%s\n' "Prepping ssh stuff..."
-ssh-keyscan github.com   >> "$vagrantHome/.ssh/known_hosts"
+# Add the remote host's public keys to our knownHosts file
+printf '%s\n' "  Adding $remoteHost public key to our known_hosts file..."
+ssh-keyscan -t 'rsa' "$remoteHost" >> "$knownHosts"
 chown -R vagrant:vagrant    "$vagrantHome/.ssh"
 find "$vagrantHome/.ssh" -type f -name 'id_rsa*' -exec chmod 600 {} \;
+
+# TESTING: Remove the remote host's public key(s) from $knownHosts
+#printf '\n%s\n' "Removing the rHostIP public key from our known_hosts file..."
+#ssh-keygen -f "$knownHosts" -R "$remoteHost"
+
+
+
+
+
+
+
