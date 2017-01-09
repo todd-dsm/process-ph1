@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+box_url = "#{ENV['VAGRANT_BOXES']}/vms/vagrant/boxes/debian/jessie-virtualbox.box"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -16,7 +17,7 @@ Vagrant.configure("2") do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "/Users/thomas/vms/vagrant/boxes/debian/jessie-virtualbox.box"
+  config.vm.box_url = box_url
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
