@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eux
 
 ###----------------------------------------------------------------------------
@@ -187,10 +187,14 @@ fi
 ###---
 ### Copy keys for github
 ###---
-printf '\n\n%s\n' "Prepping ssh stuff..."
 # Add the remote host's public keys to our knownHosts file
-printf '%s\n' "  Adding $remoteHost public key to our known_hosts file..."
-ssh-keyscan -t 'rsa' "$remoteHost" >> "$knownHosts"
+printf '\n\n%s\n' "Adding the RSA keys for all Remote Hosts..."
+if ! grep "$remoteHost" "$knownHosts"; then
+    printf '%s\n' "  Adding the RSA key for $remoteHost"
+    ssh-keyscan -t 'rsa' "$remoteHost" >> "$knownHosts"
+else
+    printf '%s\n' "  We already have the key for:  $remoteHost"
+fi
 chown -R vagrant:vagrant    "$vagrantHome/.ssh"
 find "$vagrantHome/.ssh" -type f -name 'id_rsa*' -exec chmod 600 {} \;
 
