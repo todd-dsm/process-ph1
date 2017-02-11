@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# QnD scipt to build new boxes with packer and load them into to
-# the local vagrant registry.
-
+# shellcheck disable=SC1091
+# QnD scipt to build new boxes with packer and load them into to the local
+# vagrant registry.
+if [[ -f ./vars-build ]]; then
+    source ./vars-build
+fi
 boxName="jessie"
 boxPath="$HOME/vms/vagrant/boxes/debian/jessie-virtualbox.box"
 
 # Build the box
 date
-packer build --only=virtualbox-iso debian-8.6-amd64.json
-if [[ $? -ne 0 ]]; then
+if ! packer build --only=virtualbox-iso debian-8.6-amd64.json; then
     echo -e "\n\n    Abort! Abort!    \n\n"
     exit 1
 fi
