@@ -30,17 +30,32 @@ If the most costly operations are server builds, then remove DEV builds from AWS
  * Vagrant
  * VirtualBox
  * VirtualBox Extension pack
+ * This directory structure must exist:
+```bash
+$ tree -d -L 2 ~/vms/
+~/vms/
+├── packer
+│   ├── builds
+│   ├── iso-cache
+│   └── vms
+├── vagrant
+│   ├── boxes
+...
+├── vbox
+...
+└── vmware
+...
+```
 
-
-## Result
+## Expected Result
 1. Time Savings:
  1. There are no security considerations. Devs are free to access the system at will.
  2. Devs can easily rebuild a contaminated work-spaces in minutes without waiting for Admins.
  3. Admins are free to do other work.
 2. Money Savings:
  1. Environments are not being built, destroyed and rebuilt in AWS.
- 2. Dev/Admin time is not wasted waiting on one another.
- 
+ 2. Dev/Admin time is not burned waiting on one another.
+
 # The Setup
 It takes time to configure developer laptops. However: 
  * Configuration time has been reduced - as much as possible - with [mac-ops] automation.
@@ -48,7 +63,7 @@ It takes time to configure developer laptops. However:
  * This can be done safely with structured user data [backups] and restoration.
   * Data restoration: fluctuates based on the type and quantity of data being restored; i.e.:
    * VMs take longer to restore than ASCII text files.
-   * A median recovery can take approximately 1 hour.
+   * A median recovery can take approximately a little over 1 hour.
 
 Training time: (Devs)
  * Learn [Vagrant]: approximately 1-2 hours
@@ -59,7 +74,7 @@ Training time: (Devs)
 
 
 # View from the Dev Cockpit
-Pull the code:
+As a developer, we would first need to pull the code:
 ```bash
 cd ~/code
 git clone git@github.com:todd-dsm/process-ph1.git
@@ -116,7 +131,8 @@ The system is ready to inspect when the **Ready for Testing!** message is displa
 
 This demonstrates a possible development environment where Devs are free to code at will. 
 
-Now, let's say we've trashed the environment and we need to start fresh. 
+Now, let's say we've trashed the environment and we need to start fresh.
+
 1. Hit CTRL+c to stop the docker processes.
 2. Any code written/modified during this cycle should be committed back to the repo.
 3. Log out of the VM: `exit`. You have been returned to your Host machine.
@@ -130,7 +146,8 @@ Now, let's say we've trashed the environment and we need to start fresh.
  * Verify that `myfile` no longer exists in the home directory.
 7. Log out of the VM: `exit`. You have been returned to your Host machine.
 8. Type `vagrant destroy -f`. The VM has been removed from the system.
- 
+
+
 # Conclusion
 This system has the attributes:
 
@@ -138,7 +155,7 @@ This system has the attributes:
 2. The dev environment supports the language (python) in which the service built - but can be easily adjusted to support another language.
 3. No inter-team delays have been incurred.
 4. Nor have any non-setup related costs been incurred.
-
+5. No Host machines were harmed in the making of this VM.
 
 [virtualization]:http://www.intel.com/content/www/us/en/virtualization/virtualization-technology/intel-virtualization-technology.html
 [mac-ops]:https://github.com/todd-dsm/mac-ops
