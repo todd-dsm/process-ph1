@@ -148,6 +148,13 @@ Now, let's say we've trashed the environment and we need to start fresh.
 8. Type `vagrant destroy -f`. The VM has been removed from the system.
 
 
+## Clear the build 
+
+Artifacts from both Vagrant and Packer are still lingering on the system; dump them:
+
+`./test-reset.sh`
+
+
 # Conclusion
 This system has the attributes:
 
