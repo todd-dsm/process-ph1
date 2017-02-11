@@ -5,12 +5,12 @@ This is the first step in a description of a process to:
 1. Distribute the DEV environment for software engineers to build and test services.
 2. Build an AMI to support that service.
 3. Deploy the service:
-  1. Based on the AMI (step2) 
-  2. With the developed code (step1) 
+  1. Based on the AMI build in step2
+  2. With the code developed in step1
 
 
 ## Problem
-The most costly operations in AWS are builds; i.e.: resource acquisition and deployments (assembly of cpu cycles, memory, storage, etc). While in development, these operations could potentially be done multiple times:
+The most costly operations in AWS are builds; i.e.: resource acquisition and deployments (assembly of cpu , memory, storage, etc). While in development, these operations could potentially be done multiple times:
  * while testing an idea, which ultimately
  * does not work out
  * resulting in burnt project dollars.
@@ -21,7 +21,7 @@ Resources burnt:
  * time while devs are waiting for deployments
   * and potential securiy hangups, i.e.: devs do not have enough rights to build on the target machine.
  * All while cpu cycles, memory, and storage are in-play.
- 
+
 ## Solution
 If the most costly operations are server builds, then remove DEV builds from AWS and distribute them to developer laptops.
 
@@ -84,11 +84,14 @@ cd process-ph1/
 Build the system:
 `./test-build.sh`
 
+*NOTE: this script will source-in variables that are required to build within the context of this scenario. Ultimately, they should become part of `~/.bashrc`*.
+
+
 The packer portion of this script is complete when you see these lines output:
 ```bash
 ==> virtualbox-iso (vagrant): Creating Vagrant box for 'virtualbox' provider
     virtualbox-iso (vagrant): Copying from artifact: $HOME/vms/packer/builds/debian/debian-8.6-amd64-disk1.vmdk
-    virtualbox-iso (vagrant): Copying from artifact: $HOME//vms/packer/builds/debian/debian-8.6-amd64.ovf
+    virtualbox-iso (vagrant): Copying from artifact: $HOME/vms/packer/builds/debian/debian-8.6-amd64.ovf
     virtualbox-iso (vagrant): Renaming the OVF to box.ovf...
     virtualbox-iso (vagrant): Compressing: Vagrantfile
     virtualbox-iso (vagrant): Compressing: box.ovf
