@@ -157,6 +157,9 @@ Artifacts from both Vagrant and Packer are still lingering on the system; dump t
 
 `./test-reset.sh`
 
+**Additional Problems**
+
+There are things I don't like about some of the automation like the build and reset scripts should be combined, etc. I'm aware of all inadequacies. However, I'm just 1 set of hands working alone. All of these things can be fixed.
 
 # Conclusion
 This system has the attributes:
